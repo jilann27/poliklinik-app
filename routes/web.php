@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Admin\AdminPoliController;
+use App\Http\Controllers\Admin\ObatController;
+use App\Http\Controllers\Admin\DokterController;
+use App\Http\Controllers\Admin\PasienController;
+use App\Http\Controllers\Dokter\JadwalPeriksaController;
 //Route::get('/', function () {
  //   return view('welcome');
 //});
@@ -21,11 +25,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
+    Route::resource('polis', AdminPoliController::class);
+    Route::resource('polis', AdminPoliController::class);
 
-    Route::get('/polis', fn () => 'Halaman Poli (menyusul)')->name('polis.index');
-    Route::get('/dokter', fn () => 'Halaman Dokter (menyusul)')->name('dokter.index');
-    Route::get('/pasien', fn () => 'Halaman Pasien (menyusul)')->name('pasien.index');
-    Route::get('/obat', fn () => 'Halaman Obat (menyusul)')->name('obat.index');
+    // Placeholder, diganti CRUD di materi berikutnya
+    Route::resource('dokter', DokterController::class);
+    Route::resource('pasien', PasienController::class);
+    Route::resource('obat', ObatController::class);
 });
 
 Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->group(function () {
@@ -33,7 +39,7 @@ Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->group(function () 
         return view('dokter.dashboard');
     })->name('dokter.dashboard');
 
-    Route::get('/jadwal-periksa', fn () => 'Halaman Jadwal Periksa (menyusul)')->name('jadwal-periksa.index');
+    Route::resource('jadwal-periksa', JadwalPeriksaController::class);
     Route::get('/periksa-pasien', fn () => 'Halaman Periksa Pasien (menyusul)')->name('periksa-pasien.index');
     Route::get('/riwayat-pasien', fn () => 'Halaman Riwayat Pasien (menyusul)')->name('riwayat-pasien.index');
 });
