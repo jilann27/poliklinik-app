@@ -17,7 +17,7 @@ class DaftarPoli extends Model
 
     public function pasien()
     {
-        return $this->belongsTo(Pasien::class, 'id_pasien');
+        return $this->belongsTo(User::class, 'id_pasien');   // DIGANTI: Pasien -> User
     }
 
     public function jadwalPeriksa()
@@ -28,5 +28,11 @@ class DaftarPoli extends Model
     public function periksas()
     {
         return $this->hasMany(Periksa::class, 'id_daftar_poli');
+    }
+
+    // DITAMBAH: dipakai view dan controller Periksa Pasien
+    public function periksa()
+    {
+        return $this->hasOne(Periksa::class, 'id_daftar_poli');
     }
 }
