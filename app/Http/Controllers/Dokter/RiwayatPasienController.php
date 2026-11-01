@@ -17,7 +17,7 @@ class RiwayatPasienController extends Controller
             'daftarPoli.pasien',
             'daftarPoli.jadwalPeriksa.dokter',
             'detailPeriksas.obat'
-        ])->orderBy('tgl_periksa', 'desc')->get();
+        ])->orderBy('tgl_periksa', 'desc')->paginate(10);
 
         return view('dokter.riwayat-pasien.index', compact('riwayatPasien'));
     }
@@ -32,6 +32,8 @@ class RiwayatPasienController extends Controller
             'detailPeriksas.obat'
         ])->findOrFail($id);
 
-        return view('dokter.riwayat-pasien.show', compact('periksa'));
+        $jumlahObat = $periksa->detailPeriksas->count();
+
+        return view('dokter.riwayat-pasien.show', compact('periksa','jumlahObat'));
     }
 }

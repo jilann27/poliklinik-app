@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pasien;
 use App\Http\Controllers\Controller;
 use App\Models\DaftarPoli;
 use App\Models\JadwalPeriksa;
+use App\Models\User;
 use App\Models\Poli;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,15 @@ class PoliController extends Controller
     public function get()
     {
         $user = Auth::user();
+
+        // Buat nomor rekam medis otomatis jika belum ada. Format: 202610-001
+        if (!$user->no_rm) {
+            $prefix = now()->format('Ym');
+            $urut = User::where('no_rm', 'like', $prefix . '-%')->count() + 1;
+            $user->no_rm = $prefix . '-' . str_pad($urut, 3, '0', STR_PAD_LEFT);
+            $user->save();
+        }
+
         $polis = Poli::all();
         $jadwal = JadwalPeriksa::with('dokter', 'dokter.poli')->get();
 
@@ -44,7 +54,6 @@ class PoliController extends Controller
 
         return redirect()
             ->back()
-            ->with('message', 'Berhasil Mendaftar ke Poli')
-            ->with('type', 'success');
+            ->with('success', 'Berhasil Mendaftar ke Poli');
     }
 }

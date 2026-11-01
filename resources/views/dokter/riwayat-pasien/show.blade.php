@@ -67,11 +67,14 @@
         {{-- Obat yang Diresepkan --}}
         <div class="card bg-base-100 shadow-sm rounded-2xl border border-slate-200">
             <div class="card-body p-0">
-                <div class="px-6 py-4 border-b border-slate-200">
-                    <h3 class="font-bold text-slate-800">Obat yang Diresepkan</h3>
-                </div>
-                <div class="p-0">
-                    @if($periksa->detailPeriksas && $periksa->detailPeriksas->count() > 0)
+                <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                <h3 class="font-bold text-slate-800">Obat yang Diresepkan</h3>
+                <span class="text-sm font-semibold text-slate-600">
+                    {{ $jumlahObat }} obat diresepkan
+                </span>
+            </div>
+            <div class="p-0">
+                @if($periksa->detailPeriksas && $periksa->detailPeriksas->count() > 0)
                     <table class="table table-zebra w-full">
                         <thead class="bg-slate-100 text-slate-500 text-xs uppercase tracking-wider">
                             <tr>

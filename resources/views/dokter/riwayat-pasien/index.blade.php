@@ -78,4 +78,9 @@
         </div>
     </div>
 
+    {{-- Pagination --}}
+    <div class="mt-4">
+        {{ $riwayatPasien->links() }}
+    </div>
+
 </x-layouts.app>

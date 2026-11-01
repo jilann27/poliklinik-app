@@ -28,34 +28,35 @@ class PeriksaPasienController extends Controller
 
     public function create($id)
     {
+        $daftarPoli = DaftarPoli::with('pasien')->findOrFail($id);
         $obats = Obat::all();
-        return view('dokter.periksa-pasien.create', compact('obats', 'id'));
+
+        return view('dokter.periksa-pasien.create', compact('obats', 'daftarPoli'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'obat_json' => 'required',
-            'catatan' => 'nullable|string',
-            'biaya_periksa' => 'required|integer',
+            'id_daftar_poli' => 'required|exists:daftar_poli,id',
+            'obat'           => 'required|array|min:1',
+            'obat.*'         => 'exists:obat,id',
+            'catatan'        => 'nullable|string',
         ]);
 
-        $obatIds = json_decode($request->obat_json, true);
+        $totalObat = Obat::whereIn('id', $request->obat)->sum('harga');
 
         $periksa = Periksa::create([
             'id_daftar_poli' => $request->id_daftar_poli,
-            'tgl_periksa' => now(),
-            'catatan' => $request->catatan,
-            'biaya_periksa' => $request->biaya_periksa + 150000,
+            'tgl_periksa'    => now(),
+            'catatan'        => $request->catatan,
+            'biaya_periksa'  => $totalObat + 150000,
         ]);
 
-        if (is_array($obatIds)) {
-            foreach ($obatIds as $idObat) {
-                DetailPeriksa::create([
-                    'id_periksa' => $periksa->id,
-                    'id_obat' => $idObat,
-                ]);
-            }
+        foreach ($request->obat as $idObat) {
+            DetailPeriksa::create([
+                'id_periksa' => $periksa->id,
+                'id_obat'    => $idObat,
+            ]);
         }
 
         return redirect()

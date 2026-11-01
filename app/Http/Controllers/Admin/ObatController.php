@@ -22,9 +22,9 @@ class ObatController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_obat' => 'required|string',
+            'nama_obat' => 'required|string|max:255',
             'kemasan' => 'required|string',
-            'harga' => 'required|integer',
+            'harga' => 'required|numeric',
         ]);
 
         Obat::create([
